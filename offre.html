@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Détail de l'offre</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Script pour afficher dynamiquement le poste depuis l'URL
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const poste = params.get("poste");
+      const titre = document.getElementById("titre-poste");
+      const description = document.getElementById("description-poste");
+
+      // Contenu fictif à adapter
+      const offres = {
+        "developpeur-web": {
+          titre: "Développeur Web - CDI à Paris",
+          description: "Rejoignez notre équipe tech pour développer des applications modernes en React et Node.js."
+        },
+        "responsable-rh": {
+          titre: "Responsable RH - CDI à Lyon",
+          description: "Pilotez la stratégie RH d’une entreprise en pleine croissance."
+        },
+        "assistant-marketing": {
+          titre: "Assistant Marketing - Stage à Toulouse",
+          description: "Soutenez l’équipe marketing dans la création de contenu et la gestion des réseaux sociaux."
+        },
+        "stagiaire-ux-ui": {
+          titre: "Stagiaire UX/UI - Lille",
+          description: "Participez à la refonte ergonomique d’une plateforme SaaS."
+        }
+      };
+
+      if (offres[poste]) {
+        titre.textContent = offres[poste].titre;
+        description.textContent = offres[poste].description;
+      } else {
+        titre.textContent = "Offre non trouvée";
+        description.textContent = "Veuillez revenir à la page d’accueil.";
+      }
+    });
+  </script>
+</head>
+<body>
+  <main class="offre-container">
+    <a href="index.html" class="btn btn-cdi">← Retour à l'accueil</a>
+    <h1 id="titre-poste">Chargement...</h1>
+    <p id="description-poste">Veuillez patienter.</p>
+
+    <a href="#" class="btn btn-stage" style="margin-top: 2rem;">Postuler</a>
+  </main>
+</body>
+</html>
