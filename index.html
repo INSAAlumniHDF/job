@@ -1,50 +1,362 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>INSA Alumni HDF</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>INSA Alumni HDF - Offres d'emploi</title>
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+}
+
+header {
+  background: #810000;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header img {
+  height: 40px;
+}
+
+.search-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-filter input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex: 1;
+}
+
+.search-filter button {
+  background: #810000;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 18px;
+}
+
+.filters-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px 30px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  z-index: 1000;
+  max-width: 350px;
+  width: 90%;
+  box-sizing: border-box;
+  position: fixed;
+}
+
+.filters-modal h3 {
+  margin-top: 0;
+  color: #810000;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-group strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.filters-modal label {
+  display: block;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.filters-modal input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.filters-modal button {
+  margin-top: 10px;
+  background: #810000;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 48%;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.filters-modal button:hover {
+  background: #5e0000;
+}
+
+.filters-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #810000;
+  cursor: pointer;
+}
+
+.offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.offer-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.offer-card h3 {
+  color: #810000;
+  margin: 0 0 10px 0;
+}
+
+.offer-card p {
+  margin: 5px 0;
+}
+
+.offer-card a {
+  display: inline-block;
+  text-decoration: none;
+  background: #810000;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.offer-card a:hover {
+  background: #333;
+}
+
+#backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #810000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1500;
+}
+
+#backToTop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+</style>
 </head>
 <body>
-  <!-- En-tête -->
-  <header>
-    <h1>INSA Alumni HDF</h1>
-    <p>Trouvez le poste qui vous correspond</p>
-  </header>
+<header>
+<img src="logo.png" alt="Logo INSA Alumni HDF" />
+<h1>Offres d'emploi</h1>
+</header>
 
-  <!-- Boutons principaux -->
-  <main class="main-buttons">
-    <a href="#cdi" class="btn btn-cdi">Voir les offres CDI</a>
-    <a href="#stages" class="btn btn-stage">Voir les offres de stage</a>
-  </main>
+<div class="search-filter">
+<input type="text" id="search" placeholder="Rechercher une offre par titre..." />
+<button id="openFilters" title="Filtres">⚙️</button>
+</div>
 
-  <!-- Section Offres CDI -->
-  <section id="cdi">
-    <h2>Offres CDI</h2>
-    <ul>
-      <li>
-        <a href="offre.html?poste=developpeur-web">Ingénieur chargé d’études  – Lyon</a>
-      </li>
-      <li>
-        <a href="offre.html?poste=responsable-rh">Chargé(e) de développement recharge électrique Poids Lourd F/H – Nanterre</a>
-      </li>
-    </ul>
-  </section>
+<div class="filters-modal" id="filtersModal">
+<button class="close-btn" id="closeFilters" title="Fermer">×</button>
+<h3>Filtres</h3>
 
-  <!-- Section Offres de Stage -->
-  <section id="stages">
-    <h2>Offres de Stage</h2>
-    <ul>
-      <li>
-        <a href="offre.html?poste=assistant-marketing">Validation par éléments finis de modèles analytiques – Lyon</a>
-      </li>
-    </ul>
-  </section>
+```
+<div class="filter-group">
+  <strong>Lieu</strong>
+  <label><input type="checkbox" value="Paris" class="filter-location" /> Paris</label>
+  <label><input type="checkbox" value="Lille" class="filter-location" /> Lille</label>
+  <label><input type="checkbox" value="Lyon" class="filter-location" /> Lyon</label>
+  <label><input type="checkbox" value="Marseille" class="filter-location" /> Marseille</label>
+</div>
 
-  <!-- Pied de page -->
-  <footer>
-    <p>© 2025 INSA Alumni HDF - Tous droits réservés</p>
-  </footer>
+<div class="filter-group">
+  <strong>Catégorie</strong>
+  <label><input type="checkbox" value="CDI" class="filter-type" /> CDI</label>
+  <label><input type="checkbox" value="Stage" class="filter-type" /> Stage</label>
+  <label><input type="checkbox" value="Autre" class="filter-type" /> Autre</label>
+</div>
+
+<div class="filters-buttons">
+  <button id="resetFilters">Réinitialiser les filtres</button>
+  <button id="applyFilters">Appliquer les filtres</button>
+</div>
+
+```
+
+</div>
+
+<div class="offers" id="offers">
+<div class="offer-card" data-location="Paris" data-type="CDI">
+<h3>Ingénieur Mécanique</h3>
+<p>Lieu : Paris</p>
+<a href="annonce.html">Consulter l'annonce</a>
+</div>
+
+<div class="offer-card" data-location="Lille" data-type="Stage">
+  <h3>Stage Conception Produit</h3>
+  <p>Lieu : Lille</p>
+  <a href="annonce.html">Consulter l'annonce</a>
+</div>
+
+<div class="offer-card" data-location="Lyon" data-type="Autre">
+  <h3>Technicien Prototype</h3>
+  <p>Lieu : Lyon</p>
+  <a href="annonce.html">Consulter l'annonce</a>
+</div>
+
+<div class="offer-card" data-location="Marseille" data-type="CDI">
+  <h3>Chef de Projet</h3>
+  <p>Lieu : Marseille</p>
+  <a href="annonce.html">Consulter l'annonce</a>
+</div>
+
+</div>
+
+<button id="backToTop" title="Remonter en haut">⬆️</button>
+
+<script>
+const searchInput = document.getElementById("search");
+const offers = document.querySelectorAll(".offer-card");
+const filtersModal = document.getElementById("filtersModal");
+const openFilters = document.getElementById("openFilters");
+const applyFilters = document.getElementById("applyFilters");
+const closeFilters = document.getElementById("closeFilters");
+const resetFilters = document.getElementById("resetFilters");
+const backToTop = document.getElementById("backToTop");
+
+// Recherche par titre
+searchInput.addEventListener("input", () => {
+  filterOffers();
+});
+
+// Ouvrir modal filtres
+openFilters.addEventListener("click", () => {
+  filtersModal.style.display = "block";
+});
+
+// Fermer modal filtres via bouton close
+closeFilters.addEventListener("click", () => {
+  filtersModal.style.display = "none";
+});
+
+// Fermer modal filtres en cliquant en dehors
+window.addEventListener("click", (e) => {
+  if (e.target === filtersModal) {
+    filtersModal.style.display = "none";
+  }
+});
+
+// Appliquer filtres
+applyFilters.addEventListener("click", () => {
+  filterOffers();
+  filtersModal.style.display = "none";
+});
+
+// Réinitialiser filtres
+resetFilters.addEventListener("click", () => {
+  // Décoche toutes les cases
+  document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
+  // Vide la barre de recherche
+  searchInput.value = "";
+  // Affiche toutes les offres
+  offers.forEach(offer => offer.style.display = "block");
+});
+
+function filterOffers() {
+  const searchText = searchInput.value.toLowerCase();
+
+  // Récupérer les filtres cochés
+  const selectedLocations = Array.from(document.querySelectorAll(".filter-location:checked")).map(i => i.value);
+  const selectedTypes = Array.from(document.querySelectorAll(".filter-type:checked")).map(i => i.value);
+
+  offers.forEach(offer => {
+    const title = offer.querySelector("h3").textContent.toLowerCase();
+    const location = offer.dataset.location;
+    const type = offer.dataset.type;
+
+    const matchesSearch = title.includes(searchText);
+    const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
+    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
+
+    if (matchesSearch && matchesLocation && matchesType) {
+      offer.style.display = "block";
+    } else {
+      offer.style.display = "none";
+    }
+  });
+}
+
+// Bouton remonter en haut
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTop.classList.add("show");
+  } else {
+    backToTop.classList.remove("show");
+  }
+});
+
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+</script>
 </body>
 </html>
