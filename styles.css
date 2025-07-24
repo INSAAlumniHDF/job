@@ -1,105 +1,280 @@
-/* Reset & base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  font-family: "Segoe UI", sans-serif;
-  background-color: #f7f7f7;
-  color: #333;
-  line-height: 1.6;
+margin: 0;
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
 }
 
-/* Header */
 header {
-  background-color: #ffbdcb;
-  color: #274661;
-  padding: 3rem 1rem;
-  text-align: center;
-}
-
-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Buttons */
-.main-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin: 2rem auto;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: background 0.3s ease;
+  background: #ffbdcb;
   color: white;
-  font-weight: bold;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.btn-cdi {
-  background-color: #274661;
+header img {
+  height: 40px;
 }
 
-.btn-cdi:hover {
-  background-color: #3f7cb1;
-}
-
-.btn-stage {
-  background-color: #274661;
-}
-
-.btn-stage:hover {
-  background-color: #3f7cb1;
-}
-
-/* Sections */
-section {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem 2rem;
+.search-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20%;
+  margin-right: 20%;
+  padding: 20px;
   background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-filter input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex: 1;
+}
+
+.search-filter button {
+  background: #ffbdcb;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 18px;
+}
+
+.filters-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px 30px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-width: 350px;
+  width: 90%;
+  box-sizing: border-box;
+  position: fixed;
 }
 
-section h2 {
-  margin-bottom: 1rem;
-  color: #274661;
-}
-
-/* Footer */
-footer {
+.filters-modal h3 {
+  margin-top: 0;
+  color: #ffbdcb;
   text-align: center;
-  margin-bottom: 0;
-  padding: 1rem;
-  background-color: #eee;
+  margin-bottom: 15px;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-group strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.filters-modal label {
+  display: block;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.filters-modal input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.filters-modal button {
+  margin-top: 10px;
+  background: #ffbdcb;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 48%;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.filters-modal button:hover {
+  background: #5e0000;
+}
+
+.filters-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffbdcb;
+  cursor: pointer;
+}
+
+.offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.offer-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.offer-card h3 {
+  color: #ffbdcb;
+  margin: 0 0 10px 0;
+}
+
+.offer-card p {
+  margin: 5px 0;
+}
+
+.offer-card a {
+  display: inline-block;
+  text-decoration: none;
+  background: #ffbdcb;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.offer-card a:hover {
+  background: #333;
+}
+
+#backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #ffbdcb;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1500;
+}
+
+#backToTop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.back-btn {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  background: white;
+  color: #810000;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
   font-size: 0.9rem;
-  margin-top: 3rem;
-}
-.offre-container {
-  max-width: 700px;
-  margin: 4rem auto;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-  text-align: left;
+  border: 1px solid #810000;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.offre-container h1 {
-  margin-bottom: 1rem;
-  color: #0077b6;
+.back-btn:hover {
+  background: #810000;
+  color: white;
 }
 
-.offre-container p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section-title {
+  color: #810000;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #810000;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.info {
+  margin: 15px 0;
+}
+
+.info strong {
+  display: inline-block;
+  width: 220px;
+  font-weight: bold;
+  color: #333;
+}
+
+.description {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.contact {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f7f2f2;
+  border-radius: 8px;
+}
+
+.contact h3 {
+  color: #810000;
+  margin-top: 0;
+}
+
+.btn-apply {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  background: #810000;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.btn-apply:hover {
+  background: #333;
 }
