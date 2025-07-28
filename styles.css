@@ -109,6 +109,11 @@ header h1 {
 
 .filters-modal h3 {
   margin-top: 0;
+  color: #ffbdcb;
+}
+
+.filter-group strong {
+  color: #274661;
 }
 
 .filter-group {
@@ -239,6 +244,10 @@ header h1 {
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 1500;
+}
+
+#backToTop img {
+  height: 20px;
 }
 
 #backToTop.show {
