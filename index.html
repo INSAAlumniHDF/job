@@ -1,162 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>INSA Alumni HDF - Offres d'emploi</title>
-<link rel="stylesheet" href="styles.css">
-
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>INSA Alumni HDF - Offres d'emploi</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-<header>
-<img src="logo.png" alt="Logo INSA Alumni HDF" />
-<h1>Offres d'emploi</h1>
-</header>
+  <header>
+    <img src="Logo compact blanc et rose.png" alt="Logo INSA Alumni HDF" />
+    <h1>Offres d'emploi</h1>
+  </header>
 
-<div class="search-filter">
-<input type="text" id="search" placeholder="Rechercher une offre..." />
-<button id="openFilters" title="Filtres"><i class="fa-solid fa-sliders"></i></button>
-</div>
+  <div class="search-filter">
+    <input type="text" id="search" placeholder="Rechercher une offre..." />
+    <button id="openFilters" title="Filtres">
+      <img src="filtres.png" alt="Filtres" />
+    </button>
+  </div>
 
-<div class="filters-modal" id="filtersModal">
-<button class="close-btn" id="closeFilters" title="Fermer">×</button>
-<h3>Filtres</h3>
+  <!-- Overlay -->
+  <div id="overlay"></div>
 
-```
-<div class="filter-group">
-  <strong>Lieu</strong>
-  <label><input type="checkbox" value="Lyon" class="filter-location" /> Lyon</label>
-  <label><input type="checkbox" value="Nanterre" class="filter-location" /> Marseille</label>
-</div>
+  <!-- Modale filtres -->
+  <div id="filtersModal" class="filters-modal">
+    <button class="close-btn" id="closeFilters" aria-label="Fermer la fenêtre">
+      <img src="fermer.png" alt="Fermer" />
+    </button>
+    <h3>Filtres</h3>
+    <form id="filtersForm">
+      <div class="filter-group">
+        <strong>Lieu</strong>
+        <label><input type="checkbox" value="Lyon" class="filter-location" /> Lyon</label>
+        <label><input type="checkbox" value="Nanterre" class="filter-location" /> Marseille</label>
+      </div>
+      <div class="filter-group">
+        <strong>Catégorie</strong>
+        <label><input type="checkbox" value="CDI" class="filter-type" /> CDI</label>
+        <label><input type="checkbox" value="Stage" class="filter-type" /> Stage</label>
+        <label><input type="checkbox" value="Autre" class="filter-type" /> Autre</label>
+      </div>
+      <div class="filters-buttons">
+        <button type="button" id="resetFilters">Réinitialiser les filtres</button>
+        <button type="submit" id="applyFilters">Appliquer les filtres</button>
+      </div>
+    </form>
+  </div>
 
-<div class="filter-group">
-  <strong>Catégorie</strong>
-  <label><input type="checkbox" value="CDI" class="filter-type" /> CDI</label>
-  <label><input type="checkbox" value="Stage" class="filter-type" /> Stage</label>
-  <label><input type="checkbox" value="Autre" class="filter-type" /> Autre</label>
-</div>
+  <!-- Offres -->
+  <div class="offers" id="offers">
+    <div class="offer-card" data-location="Lyon" data-type="Stage">
+      <h3>Validation par Elements finis des modèles analytiques</h3>
+      <p>Lyon</p>
+      <p>Velan SAS</p>
+      <a href="Validation par Elements finis des modèles analytiques.html">Consulter l'annonce</a>
+    </div>
+    <div class="offer-card" data-location="Lyon" data-type="CDI">
+      <h3>Ingénieur chargé d'études</h3>
+      <p>Lyon</p>
+      <p>Cabinet Merlin</p>
+      <a href="ingénieur chargé d'études.html">Consulter l'annonce</a>
+    </div>
+    <div class="offer-card" data-location="Nanterre" data-type="CDI">
+      <h3>Chargé(e) de développement recharge électrique Poids Lourd F/H</h3>
+      <p>Lyon</p>
+      <p>VOLTIX - Groupe VINCI</p>
+      <a href="Chargé(e) de développement recharge électrique Poids Lourd FH.html">Consulter l'annonce</a>
+    </div>
+  </div>
 
-<div class="filters-buttons">
-  <button id="resetFilters">Réinitialiser les filtres</button>
-  <button id="applyFilters">Appliquer les filtres</button>
-</div>
-
-```
-
-</div>
-
-<div class="offers" id="offers">
-<div class="offer-card" data-location="Lyon" data-type="Stage">
-<h3>Validation par Elements finis des modèles analytiques</h3>
-<p>Lyon</p>
-<p>Velan SAS</p>
-<a href="Validation par Elements finis des modèles analytiques.html">Consulter l'annonce</a>
-</div>
-
-<div class="offer-card" data-location="Lyon" data-type="CDI">
-  <h3>Ingénieur chargé d'études</h3>
-  <p>Lyon</p>
-  <p>Cabinet Merlin</p>
-  <a href="ingénieur chargé d'études.html">Consulter l'annonce</a>
-</div>
-
-<div class="offer-card" data-location="Nanterre" data-type="CDI">
-  <h3>Chargé(e) de développement recharge électrique Poids Lourd F/H</h3>
-  <p>Lyon</p>
-  <p>VOLTIX - Groupe VINCI</p>
-  <a href="Chargé(e) de développement recharge électrique Poids Lourd FH.html">Consulter l'annonce</a>
-</div>
-
-</div>
-
-<button id="backToTop" title="Remonter en haut">⬆️</button>
-
-<script>
-const searchInput = document.getElementById("search");
-const offers = document.querySelectorAll(".offer-card");
-const filtersModal = document.getElementById("filtersModal");
-const openFilters = document.getElementById("openFilters");
-const applyFilters = document.getElementById("applyFilters");
-const closeFilters = document.getElementById("closeFilters");
-const resetFilters = document.getElementById("resetFilters");
-const backToTop = document.getElementById("backToTop");
-
-// Recherche par titre
-searchInput.addEventListener("input", () => {
-  filterOffers();
-});
-
-// Ouvrir modal filtres
-openFilters.addEventListener("click", () => {
-  filtersModal.style.display = "block";
-});
-
-// Fermer modal filtres via bouton close
-closeFilters.addEventListener("click", () => {
-  filtersModal.style.display = "none";
-});
-
-// Fermer modal filtres en cliquant en dehors
-window.addEventListener("click", (e) => {
-  if (e.target === filtersModal) {
-    filtersModal.style.display = "none";
-  }
-});
-
-// Appliquer filtres
-applyFilters.addEventListener("click", () => {
-  filterOffers();
-  filtersModal.style.display = "none";
-});
-
-// Réinitialiser filtres
-resetFilters.addEventListener("click", () => {
-  // Décoche toutes les cases
-  document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
-  // Vide la barre de recherche
-  searchInput.value = "";
-  // Affiche toutes les offres
-  offers.forEach(offer => offer.style.display = "block");
-});
-
-function filterOffers() {
-  const searchText = searchInput.value.toLowerCase();
-
-  // Récupérer les filtres cochés
-  const selectedLocations = Array.from(document.querySelectorAll(".filter-location:checked")).map(i => i.value);
-  const selectedTypes = Array.from(document.querySelectorAll(".filter-type:checked")).map(i => i.value);
-
-  offers.forEach(offer => {
-    const title = offer.querySelector("h3").textContent.toLowerCase();
-    const location = offer.dataset.location;
-    const type = offer.dataset.type;
-
-    const matchesSearch = title.includes(searchText);
-    const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
-    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
-
-    if (matchesSearch && matchesLocation && matchesType) {
-      offer.style.display = "block";
-    } else {
-      offer.style.display = "none";
-    }
-  });
-}
-
-// Bouton remonter en haut
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) {
-    backToTop.classList.add("show");
-  } else {
-    backToTop.classList.remove("show");
-  }
-});
-
-backToTop.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-</script>
+  <button id="backToTop" title="Remonter en haut">⬆️</button>
+  <script src="script.js"></script>
 </body>
+
 </html>
