@@ -111,8 +111,6 @@ header h1 {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   display: none;
-  max-width: 400px;
-  width: 90%;
 }
 
 .filters-modal h3 {
@@ -371,7 +369,6 @@ header h1 {
     transform: none;
     width: 100%;
     height: 100%;
-    max-height: 100%;
     padding: 2rem 1rem 1rem 1rem;
     overflow-y: auto;
     border-radius: 0;
@@ -379,8 +376,6 @@ header h1 {
     display: none;
     z-index: 1000;
     background: white;
-
-    animation: fadeIn 0.4s ease forwards;
   }
 
   .filters-modal h3 {
