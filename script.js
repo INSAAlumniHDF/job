@@ -80,47 +80,51 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Génération dynamique des lieux dans le filtre
 window.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.offer-card');
-  const lieuxSet = new Set();
+
+  // --- COMPTEUR LIEUX ---
+  const lieuxMap = new Map(); // { "Lyon" => 2, "Paris" => 1 }
 
   cards.forEach(card => {
     const lieu = card.dataset.location;
-    if (lieu) lieuxSet.add(lieu);
+    if (lieu) {
+      lieuxMap.set(lieu, (lieuxMap.get(lieu) || 0) + 1);
+    }
   });
 
-  // On cible la section "Lieu" dans les filtres
-  const lieuFilterGroup = document.querySelectorAll('.filter-group')[0]; // le premier .filter-group
-  lieuFilterGroup.innerHTML = "<strong>Lieu</strong>"; // on vide et on garde le titre
+  const lieuFilterGroup = document.querySelectorAll('.filter-group')[0];
+  lieuFilterGroup.innerHTML = "<strong>Lieu</strong>";
 
-  lieuxSet.forEach(lieu => {
+  [...lieuxMap.entries()].sort().forEach(([lieu, count]) => {
     const label = document.createElement("label");
     label.innerHTML = `
       <input type="checkbox" value="${lieu}" class="filter-location" />
-      ${lieu}
+      ${lieu} (${count})
     `;
     lieuFilterGroup.appendChild(label);
   });
 
-    // Génération dynamique des types de contrat
-  const typesSet = new Set();
+  // --- COMPTEUR TYPES ---
+  const typesMap = new Map();
 
   cards.forEach(card => {
     const type = card.dataset.type;
-    if (type) typesSet.add(type);
+    if (type) {
+      typesMap.set(type, (typesMap.get(type) || 0) + 1);
+    }
   });
 
-  // On cible la section "Catégorie" dans les filtres
-  const typeFilterGroup = document.querySelectorAll('.filter-group')[1]; // le deuxième .filter-group
-  typeFilterGroup.innerHTML = "<strong>Catégorie</strong>"; // on vide et on garde le titre
+  const typeFilterGroup = document.querySelectorAll('.filter-group')[1];
+  typeFilterGroup.innerHTML = "<strong>Catégorie</strong>";
 
-  typesSet.forEach(type => {
+  [...typesMap.entries()].sort().forEach(([type, count]) => {
     const label = document.createElement("label");
     label.innerHTML = `
       <input type="checkbox" value="${type}" class="filter-type" />
-      ${type}
+      ${type} (${count})
     `;
     typeFilterGroup.appendChild(label);
   });
 });
+
