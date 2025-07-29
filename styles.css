@@ -336,7 +336,7 @@ header h1 {
 }
 
 /* Responsive pour petits écrans */
-@media (max-width: 580px) {
+@media (max-width: 480px) {
 
   /* Barre de recherche */
   .search-filter {
