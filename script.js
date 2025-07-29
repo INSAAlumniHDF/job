@@ -12,13 +12,14 @@ const filtersForm = document.getElementById("filtersForm");
 openFilters.addEventListener("click", () => {
   filtersModal.style.display = "block";
   overlay.style.display = "block";
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow = "hidden"; // empêche le scroll
 });
 
+// Fermer la modale
 function closeModal() {
   filtersModal.style.display = "none";
   overlay.style.display = "none";
-  document.body.style.overflow = "";
+  document.body.style.overflow = ""; // réactive le scroll
 }
 
 closeFilters.addEventListener("click", closeModal);
@@ -41,7 +42,7 @@ resetFilters.addEventListener("click", () => {
   document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
   searchInput.value = "";
   offers.forEach(offer => offer.style.display = "block");
-  updateCounters();
+  updateCounters(); // remet les bons compteurs
 });
 
 // Fonction de tri
@@ -82,99 +83,77 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Génération dynamique des filtres au chargement
+// Génération dynamique des filtres + compteurs
 window.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.offer-card');
-  const lieuxSet = new Set();
-  const typesSet = new Set();
 
+  // --- Génération Lieux ---
+  const lieuxMap = new Map();
   cards.forEach(card => {
     const lieu = card.dataset.location;
-    const type = card.dataset.type;
-    if (lieu) lieuxSet.add(lieu);
-    if (type) typesSet.add(type);
+    if (lieu) {
+      lieuxMap.set(lieu, (lieuxMap.get(lieu) || 0) + 1);
+    }
   });
 
-  // Filtres Lieux
   const lieuFilterGroup = document.querySelectorAll('.filter-group')[0];
   lieuFilterGroup.innerHTML = "<strong>Lieu</strong>";
-  lieuxSet.forEach(lieu => {
+
+  [...lieuxMap.entries()].sort().forEach(([lieu, count]) => {
     const label = document.createElement("label");
-    label.setAttribute("data-location", lieu);
+    label.setAttribute('data-location', lieu);
     label.innerHTML = `
       <input type="checkbox" value="${lieu}" class="filter-location" />
-      ${lieu} <span class="lieu-count">0</span>
+      ${lieu} (<span class="lieu-count">${count}</span>)
     `;
     lieuFilterGroup.appendChild(label);
   });
 
-  // Filtres Types
+  // --- Génération Types ---
+  const typesMap = new Map();
+  cards.forEach(card => {
+    const type = card.dataset.type;
+    if (type) {
+      typesMap.set(type, (typesMap.get(type) || 0) + 1);
+    }
+  });
+
   const typeFilterGroup = document.querySelectorAll('.filter-group')[1];
   typeFilterGroup.innerHTML = "<strong>Catégorie</strong>";
-  typesSet.forEach(type => {
+
+  [...typesMap.entries()].sort().forEach(([type, count]) => {
     const label = document.createElement("label");
-    label.setAttribute("data-type", type);
+    label.setAttribute('data-type', type);
     label.innerHTML = `
       <input type="checkbox" value="${type}" class="filter-type" />
-      ${type} <span class="type-count">0</span>
+      ${type} (<span class="type-count">${count}</span>)
     `;
     typeFilterGroup.appendChild(label);
   });
 
+  // Première mise à jour des compteurs
   updateCounters();
 });
 
-// Mise à jour des compteurs + griser / désactiver si aucun
+// Mise à jour des compteurs dynamiques après chaque filtre
 function updateCounters() {
   const visibleOffers = Array.from(offers).filter(offer => offer.style.display !== "none");
 
-  // Lieux
+  // Compteurs lieux
   const lieuLabels = document.querySelectorAll('label[data-location]');
   lieuLabels.forEach(label => {
     const lieu = label.getAttribute('data-location');
     const count = visibleOffers.filter(o => o.dataset.location === lieu).length;
     const span = label.querySelector('.lieu-count');
     if (span) span.textContent = count;
-
-    const checkbox = label.querySelector('input');
-    if (count === 0) {
-      label.style.opacity = "0.5";
-      checkbox.disabled = true;
-    } else {
-      label.style.opacity = "1";
-      checkbox.disabled = false;
-    }
   });
 
-  // Types
+  // Compteurs types
   const typeLabels = document.querySelectorAll('label[data-type]');
   typeLabels.forEach(label => {
     const type = label.getAttribute('data-type');
     const count = visibleOffers.filter(o => o.dataset.type === type).length;
     const span = label.querySelector('.type-count');
     if (span) span.textContent = count;
-
-    const checkbox = label.querySelector('input');
-    if (count === 0) {
-      label.style.opacity = "0.5";
-      checkbox.disabled = true;
-    } else {
-      label.style.opacity = "1";
-      checkbox.disabled = false;
-    }
   });
-
-  // Message si aucune offre
-  let message = document.getElementById("noResultsMessage");
-  if (!message) {
-    message = document.createElement("p");
-    message.id = "noResultsMessage";
-    message.textContent = "Aucune offre ne correspond à vos critères.";
-    message.style.textAlign = "center";
-    message.style.marginTop = "2rem";
-    message.style.display = "none";
-    document.getElementById("offers").appendChild(message);
-  }
-
-  message.style.display = (visibleOffers.length === 0) ? "block" : "none";
 }
