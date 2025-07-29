@@ -193,7 +193,8 @@ header h1 {
 
 #no-results-message {
   font-size: 1.2rem;
-  color: #ff4747; /* un rouge sympa pour attirer l'attention */
+  color: #ff4747;
+  /* un rouge sympa pour attirer l'attention */
   margin-top: 20px;
 }
 
@@ -305,7 +306,7 @@ header h1 {
 }
 
 /* Responsive pour petits écrans */
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .search-filter {
     flex-direction: column;
     align-items: center;
@@ -324,6 +325,46 @@ header h1 {
     padding: 10px;
   }
 
-  header img{
+  header img {
     display: none;
+  }
+
+  .filters-modal {
+    width: 95%;
+    padding: 1.5rem 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .filters-modal h3 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .filter-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .filter-group label {
+    display: block;
+    margin: 8px 0;
+    font-size: 1rem;
+  }
+
+  .filters-buttons {
+    flex-direction: column;
+  }
+
+  .filters-buttons button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .close-btn {
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+  }
+
 }

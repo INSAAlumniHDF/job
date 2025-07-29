@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   const lieuFilterGroup = document.querySelectorAll('.filter-group')[0];
-  lieuFilterGroup.innerHTML = "<strong>Lieu</strong>";
+  lieuFilterGroup.innerHTML = "<strong>Lieux : </strong>";
 
   [...lieuxMap.entries()].sort().forEach(([lieu, count]) => {
     const label = document.createElement("label");
@@ -125,7 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   const typeFilterGroup = document.querySelectorAll('.filter-group')[1];
-  typeFilterGroup.innerHTML = "<strong>Catégorie</strong>";
+  typeFilterGroup.innerHTML = "<strong>Types :</strong>";
 
   [...typesMap.entries()].sort().forEach(([type, count]) => {
     const label = document.createElement("label");
