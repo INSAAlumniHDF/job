@@ -102,4 +102,25 @@ window.addEventListener('DOMContentLoaded', () => {
     `;
     lieuFilterGroup.appendChild(label);
   });
+
+    // Génération dynamique des types de contrat
+  const typesSet = new Set();
+
+  cards.forEach(card => {
+    const type = card.dataset.type;
+    if (type) typesSet.add(type);
+  });
+
+  // On cible la section "Catégorie" dans les filtres
+  const typeFilterGroup = document.querySelectorAll('.filter-group')[1]; // le deuxième .filter-group
+  typeFilterGroup.innerHTML = "<strong>Catégorie</strong>"; // on vide et on garde le titre
+
+  typesSet.forEach(type => {
+    const label = document.createElement("label");
+    label.innerHTML = `
+      <input type="checkbox" value="${type}" class="filter-type" />
+      ${type}
+    `;
+    typeFilterGroup.appendChild(label);
+  });
 });
