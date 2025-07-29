@@ -79,3 +79,27 @@ window.addEventListener("scroll", () => {
 backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
+// Génération dynamique des lieux dans le filtre
+window.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.offer-card');
+  const lieuxSet = new Set();
+
+  cards.forEach(card => {
+    const lieu = card.dataset.location;
+    if (lieu) lieuxSet.add(lieu);
+  });
+
+  // On cible la section "Lieu" dans les filtres
+  const lieuFilterGroup = document.querySelectorAll('.filter-group')[0]; // le premier .filter-group
+  lieuFilterGroup.innerHTML = "<strong>Lieu</strong>"; // on vide et on garde le titre
+
+  lieuxSet.forEach(lieu => {
+    const label = document.createElement("label");
+    label.innerHTML = `
+      <input type="checkbox" value="${lieu}" class="filter-location" />
+      ${lieu}
+    `;
+    lieuFilterGroup.appendChild(label);
+  });
+});
