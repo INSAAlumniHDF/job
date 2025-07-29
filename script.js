@@ -48,10 +48,10 @@ resetFilters.addEventListener("click", () => {
   document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
   searchInput.value = "";
   offers.forEach(offer => offer.style.display = "block");
-  updateCounters(); // remet les bons compteurs
+  updateCounters(); // remet les compteurs au total global
 });
 
-// Fonction de tri
+// Fonction de tri / filtrage
 function filterOffers() {
   const searchText = searchInput.value.toLowerCase();
   const selectedLocations = Array.from(document.querySelectorAll(".filter-location:checked")).map(i => i.value);
@@ -73,7 +73,7 @@ function filterOffers() {
     }
   });
 
-  updateCounters();
+  updateCounters(); // ici compteurs fixes donc pas d’effet sur affichage
 }
 
 // Scroll top
@@ -89,7 +89,7 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Génération dynamique des filtres + compteurs
+// Génération dynamique des filtres + compteurs au chargement
 window.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.offer-card');
 
@@ -137,28 +137,28 @@ window.addEventListener('DOMContentLoaded', () => {
     typeFilterGroup.appendChild(label);
   });
 
-  // Première mise à jour des compteurs
+  // Première mise à jour des compteurs (fixes)
   updateCounters();
 });
 
-// Mise à jour des compteurs dynamiques après chaque filtre
+// Mise à jour des compteurs (affichent le total global, pas dynamique)
 function updateCounters() {
-  const visibleOffers = Array.from(offers).filter(offer => offer.style.display !== "none");
+  const allOffers = Array.from(offers);
 
-  // Compteurs lieux
+  // Compteurs lieux (total global)
   const lieuLabels = document.querySelectorAll('label[data-location]');
   lieuLabels.forEach(label => {
     const lieu = label.getAttribute('data-location');
-    const count = visibleOffers.filter(o => o.dataset.location === lieu).length;
+    const count = allOffers.filter(o => o.dataset.location === lieu).length;
     const span = label.querySelector('.lieu-count');
     if (span) span.textContent = count;
   });
 
-  // Compteurs types
+  // Compteurs types (total global)
   const typeLabels = document.querySelectorAll('label[data-type]');
   typeLabels.forEach(label => {
     const type = label.getAttribute('data-type');
-    const count = visibleOffers.filter(o => o.dataset.type === type).length;
+    const count = allOffers.filter(o => o.dataset.type === type).length;
     const span = label.querySelector('.type-count');
     if (span) span.textContent = count;
   });
