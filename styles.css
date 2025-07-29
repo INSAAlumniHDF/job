@@ -317,4 +317,7 @@ header h1 {
   .search-filter button {
     padding: 10px;
   }
+
+  .header img{
+    display: none;
 }
