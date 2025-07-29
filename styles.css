@@ -191,6 +191,12 @@ header h1 {
   background: #0047ab;
 }
 
+#no-results-message {
+  font-size: 1.2rem;
+  color: #ff4747; /* un rouge sympa pour attirer l'attention */
+  margin-top: 20px;
+}
+
 /* Bouton retour en haut */
 #backToTop {
   position: fixed;
