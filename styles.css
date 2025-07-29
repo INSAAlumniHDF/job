@@ -6,7 +6,6 @@ body {
 
 header {
   background: #274661;
-  /* Bleu pour éviter rose sur rose */
   color: white;
   padding: 10px 20px;
   display: flex;
@@ -34,33 +33,26 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 20px;
-  padding-left: 25%;
-  padding-right: 25%;
+  padding: 20px 25%;
   background: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-  margin: 10px auto;
 }
 
 .search-filter img {
   width: 24px;
-  /* Ajuste la taille si besoin */
   height: 24px;
   display: block;
 }
 
 .search-filter input {
-  width: 90vw; /* Prend 90% de la largeur visible */
-  max-width: 400px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex: 1;
 }
 
 .search-filter button {
   background: #274661;
-  /* Bleu pour éviter rose sur rose */
   color: white;
   border: none;
   padding: 8px 12px;
@@ -137,21 +129,6 @@ header h1 {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.close-btn img {
-  width: 20px;
-  height: 20px;
-}
-
-/* Bouton close top right */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -165,9 +142,7 @@ header h1 {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
-  /* Pour que l'image ne bloque pas le clic */
 }
-
 
 /* Cartes des offres */
 .offers {
@@ -178,7 +153,6 @@ header h1 {
   max-width: 1000px;
   margin: 0 auto;
   justify-content: center;
-  /* pour centrer les cases */
 }
 
 .offer-card {
@@ -207,7 +181,6 @@ header h1 {
   display: inline-block;
   text-decoration: none;
   background: #274661;
-  /* Bleu */
   color: white;
   padding: 8px 12px;
   border-radius: 5px;
@@ -225,7 +198,6 @@ header h1 {
   bottom: 30px;
   right: 30px;
   background: #274661;
-  /* Bleu */
   color: white;
   border: none;
   padding: 10px 15px;
@@ -302,7 +274,6 @@ header h1 {
   margin-top: 20px;
   text-decoration: none;
   background: #274661;
-  /* Bleu */
   color: white;
   padding: 10px 15px;
   border-radius: 5px;
@@ -328,25 +299,24 @@ header h1 {
   background: #0047ab;
 }
 
-
-/* Smartphones standards */
+/* Responsive pour petits écrans */
 @media (max-width: 1000px) {
   .search-filter {
-    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px 20px;
     margin-top: 10px;
-    position: static; /* pour ne pas overlay sur mobile */
+    position: static;
     background: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
   }
 
   .search-filter input {
-    width: 100%;
+    width: 90vw;
     max-width: 400px;
     margin-bottom: 10px;
+    box-sizing: border-box;
   }
 
   .search-filter button {
