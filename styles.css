@@ -35,7 +35,6 @@ header h1 {
   gap: 10px;
   padding: 20px 25%;
   background: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .search-filter img {
@@ -310,8 +309,7 @@ header h1 {
   }
 
   .search-filter input {
-    width: 80%;
-    max-width: 400px;
+    width: 50%;
     margin-bottom: 10px;
     box-sizing: border-box;
   }
