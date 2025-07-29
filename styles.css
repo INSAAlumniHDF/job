@@ -75,6 +75,30 @@ header h1 {
   z-index: 999;
 }
 
+/* Animation modale desktop */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Animation modale mobile */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 /* Modale */
 .filters-modal {
   position: fixed;
@@ -98,6 +122,12 @@ header h1 {
 
 .filter-group strong {
   color: #274661;
+}
+
+.filter-group label {
+  display: block;
+  margin: 8px 0;
+  font-size: 1rem;
 }
 
 .filter-group {
@@ -306,39 +336,57 @@ header h1 {
 }
 
 /* Responsive pour petits écrans */
-@media (max-width: 480px) {
+@media (max-width: 580px) {
+
+  /* Barre de recherche */
   .search-filter {
     flex-direction: column;
     align-items: center;
     padding: 10px 20px;
-    position: static;
     background: white;
   }
 
   .search-filter input {
-    width: 50%;
+    width: 100%;
     margin-bottom: 10px;
     box-sizing: border-box;
   }
 
   .search-filter button {
     padding: 10px;
+    width: 100%;
+    justify-content: center;
   }
 
+  /* Logo header */
   header img {
     display: none;
   }
 
+  /* Modale filtres full screen avec animation fade */
   .filters-modal {
-    width: 95%;
-    padding: 1.5rem 1rem;
-    max-height: 90vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    padding: 2rem 1rem 1rem 1rem;
     overflow-y: auto;
+    border-radius: 0;
+    box-shadow: none;
+    display: none;
+    z-index: 1000;
+    background: white;
+
+    animation: fadeIn 0.4s ease forwards;
   }
 
   .filters-modal h3 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     text-align: center;
+    margin-bottom: 1.5rem;
   }
 
   .filter-group {
@@ -347,12 +395,14 @@ header h1 {
 
   .filter-group label {
     display: block;
-    margin: 8px 0;
+    margin: 10px 0;
     font-size: 1rem;
   }
 
   .filters-buttons {
     flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
   }
 
   .filters-buttons button {
@@ -361,10 +411,9 @@ header h1 {
   }
 
   .close-btn {
-    top: 5px;
-    right: 5px;
-    width: 25px;
-    height: 25px;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
   }
-
 }
