@@ -41,16 +41,6 @@ header h1 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.search-filter {
-  position: absolute;
-  top: 30px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
 .search-filter img {
   width: 24px;
   /* Ajuste la taille si besoin */
@@ -339,6 +329,24 @@ header h1 {
 /* Smartphones standards */
 @media (max-width: 1000px) {
   .search-filter {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 10px;
+    position: static; /* pour ne pas overlay sur mobile */
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+
+  .search-filter input {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+  }
+
+  .search-filter button {
+    padding: 10px;
   }
 }
