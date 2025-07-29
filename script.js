@@ -12,32 +12,23 @@ const filtersForm = document.getElementById("filtersForm");
 openFilters.addEventListener("click", () => {
   filtersModal.style.display = "block";
   overlay.style.display = "block";
-  document.body.style.overflow = "hidden"; // empêche le scroll
+  document.body.style.overflow = "hidden";
 });
 
 // Fermer la modale
 function closeModal() {
   filtersModal.style.display = "none";
   overlay.style.display = "none";
-  document.body.style.overflow = ""; // réactive le scroll
+  document.body.style.overflow = "";
 }
 
 closeFilters.addEventListener("click", closeModal);
 overlay.addEventListener("click", closeModal);
 
 // Recherche live
-searchInput.addEventListener("input", () => {
-  filterOffers();
-});
+searchInput.addEventListener("input", filterOffers);
 
-// Appliquer les filtres en direct quand une case est cochée/décochée
-document.addEventListener("change", (e) => {
-  if (e.target.classList.contains("filter-location") || e.target.classList.contains("filter-type")) {
-    filterOffers();
-  }
-});
-
-// Bouton "Appliquer les filtres" = juste fermer la modale
+// Appliquer les filtres (ne sert qu'à fermer)
 filtersForm.addEventListener("submit", (e) => {
   e.preventDefault();
   closeModal();
@@ -48,7 +39,7 @@ resetFilters.addEventListener("click", () => {
   document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
   searchInput.value = "";
   offers.forEach(offer => offer.style.display = "block");
-  updateCounters(); // remet les bons compteurs
+  updateCounters(); // remettre les bons compteurs
 });
 
 // Fonction de tri
@@ -89,11 +80,11 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Génération dynamique des filtres + compteurs
+// Génération dynamique des filtres + compteurs fixes pour lieux
 window.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.offer-card');
 
-  // --- Génération Lieux ---
+  // --- Génération Lieux (compteurs fixes) ---
   const lieuxMap = new Map();
   cards.forEach(card => {
     const lieu = card.dataset.location;
@@ -115,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
     lieuFilterGroup.appendChild(label);
   });
 
-  // --- Génération Types ---
+  // --- Génération Types (compteurs dynamiques) ---
   const typesMap = new Map();
   cards.forEach(card => {
     const type = card.dataset.type;
@@ -137,24 +128,19 @@ window.addEventListener('DOMContentLoaded', () => {
     typeFilterGroup.appendChild(label);
   });
 
-  // Première mise à jour des compteurs
+  // Ajouter écouteurs pour appliquer les filtres en live
+  document.querySelectorAll(".filter-location, .filter-type").forEach(cb => {
+    cb.addEventListener("change", filterOffers);
+  });
+
   updateCounters();
 });
 
-// Mise à jour des compteurs dynamiques après chaque filtre
+// Mise à jour des compteurs dynamiques (types uniquement)
 function updateCounters() {
   const visibleOffers = Array.from(offers).filter(offer => offer.style.display !== "none");
 
-  // Compteurs lieux
-  const lieuLabels = document.querySelectorAll('label[data-location]');
-  lieuLabels.forEach(label => {
-    const lieu = label.getAttribute('data-location');
-    const count = visibleOffers.filter(o => o.dataset.location === lieu).length;
-    const span = label.querySelector('.lieu-count');
-    if (span) span.textContent = count;
-  });
-
-  // Compteurs types
+  // Compteurs types dynamiques
   const typeLabels = document.querySelectorAll('label[data-type]');
   typeLabels.forEach(label => {
     const type = label.getAttribute('data-type');
@@ -162,4 +148,6 @@ function updateCounters() {
     const span = label.querySelector('.type-count');
     if (span) span.textContent = count;
   });
+
+  // PAS de mise à jour des lieux (compteurs restent fixes)
 }
