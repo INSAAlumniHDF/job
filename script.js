@@ -1,3 +1,4 @@
+
 const searchInput = document.getElementById("search");
 const offers = document.querySelectorAll(".offer-card");
 const filtersModal = document.getElementById("filtersModal");
@@ -24,14 +25,14 @@ function closeModal() {
 
 closeFilters.addEventListener("click", closeModal);
 overlay.addEventListener("click", closeModal);
-
-// Recherche live
-searchInput.addEventListener("input", filterOffers);
-
-// Appliquer les filtres (ne sert qu'à fermer)
 filtersForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  closeModal();
+  closeModal(); // Ne fait que fermer la modale
+});
+
+// Recherche live
+searchInput.addEventListener("input", () => {
+  filterOffers();
 });
 
 // Réinitialiser
@@ -39,10 +40,16 @@ resetFilters.addEventListener("click", () => {
   document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
   searchInput.value = "";
   offers.forEach(offer => offer.style.display = "block");
-  updateCounters(); // remettre les bons compteurs
+  updateCounters(); // remet les bons compteurs
 });
 
 // Fonction de tri
+document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => {
+  cb.addEventListener("change", () => {
+    filterOffers();
+  });
+});
+
 function filterOffers() {
   const searchText = searchInput.value.toLowerCase();
   const selectedLocations = Array.from(document.querySelectorAll(".filter-location:checked")).map(i => i.value);
@@ -57,11 +64,7 @@ function filterOffers() {
     const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
 
-    if (matchesSearch && matchesLocation && matchesType) {
-      offer.style.display = "block";
-    } else {
-      offer.style.display = "none";
-    }
+    offer.style.display = (matchesSearch && matchesLocation && matchesType) ? "block" : "none";
   });
 
   updateCounters();
@@ -80,11 +83,11 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Génération dynamique des filtres + compteurs fixes pour lieux
+// Génération dynamique des filtres + compteurs
 window.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.offer-card');
 
-  // --- Génération Lieux (compteurs fixes) ---
+  // --- Génération Lieux ---
   const lieuxMap = new Map();
   cards.forEach(card => {
     const lieu = card.dataset.location;
@@ -106,7 +109,7 @@ window.addEventListener('DOMContentLoaded', () => {
     lieuFilterGroup.appendChild(label);
   });
 
-  // --- Génération Types (compteurs dynamiques) ---
+  // --- Génération Types ---
   const typesMap = new Map();
   cards.forEach(card => {
     const type = card.dataset.type;
@@ -128,26 +131,56 @@ window.addEventListener('DOMContentLoaded', () => {
     typeFilterGroup.appendChild(label);
   });
 
-  // Ajouter écouteurs pour appliquer les filtres en live
-  document.querySelectorAll(".filter-location, .filter-type").forEach(cb => {
-    cb.addEventListener("change", filterOffers);
-  });
-
   updateCounters();
 });
 
-// Mise à jour des compteurs dynamiques (types uniquement)
 function updateCounters() {
-  const visibleOffers = Array.from(offers).filter(offer => offer.style.display !== "none");
+  const selectedLocations = Array.from(document.querySelectorAll(".filter-location:checked")).map(i => i.value);
+  const selectedTypes = Array.from(document.querySelectorAll(".filter-type:checked")).map(i => i.value);
 
-  // Compteurs types dynamiques
-  const typeLabels = document.querySelectorAll('label[data-type]');
-  typeLabels.forEach(label => {
-    const type = label.getAttribute('data-type');
-    const count = visibleOffers.filter(o => o.dataset.type === type).length;
-    const span = label.querySelector('.type-count');
-    if (span) span.textContent = count;
-  });
+  const isFilteringByLocation = selectedLocations.length > 0;
+  const isFilteringByType = selectedTypes.length > 0;
 
-  // PAS de mise à jour des lieux (compteurs restent fixes)
+  let visibleOffers = Array.from(offers).filter(offer => offer.style.display !== "none");
+
+  if (isFilteringByLocation && !isFilteringByType) {
+    // Update only type counters
+    document.querySelectorAll('label[data-type]').forEach(label => {
+      const type = label.getAttribute('data-type');
+      const count = visibleOffers.filter(o => o.dataset.type === type).length;
+      const span = label.querySelector('.type-count');
+      if (span) span.textContent = count;
+    });
+  } else if (isFilteringByType && !isFilteringByLocation) {
+    // Update only location counters
+    document.querySelectorAll('label[data-location]').forEach(label => {
+      const loc = label.getAttribute('data-location');
+      const count = visibleOffers.filter(o => o.dataset.location === loc).length;
+      const span = label.querySelector('.lieu-count');
+      if (span) span.textContent = count;
+    });
+  } else if (!isFilteringByLocation && !isFilteringByType) {
+    // Show all original counts
+    const countMapLoc = {};
+    const countMapType = {};
+
+    offers.forEach(o => {
+      const loc = o.dataset.location;
+      const type = o.dataset.type;
+      countMapLoc[loc] = (countMapLoc[loc] || 0) + 1;
+      countMapType[type] = (countMapType[type] || 0) + 1;
+    });
+
+    document.querySelectorAll('label[data-location]').forEach(label => {
+      const loc = label.getAttribute('data-location');
+      const span = label.querySelector('.lieu-count');
+      if (span) span.textContent = countMapLoc[loc] || 0;
+    });
+
+    document.querySelectorAll('label[data-type]').forEach(label => {
+      const type = label.getAttribute('data-type');
+      const span = label.querySelector('.type-count');
+      if (span) span.textContent = countMapType[type] || 0;
+    });
+  }
 }
