@@ -12,14 +12,14 @@ const filtersForm = document.getElementById("filtersForm");
 openFilters.addEventListener("click", () => {
   filtersModal.style.display = "block";
   overlay.style.display = "block";
-  document.body.style.overflow = "hidden"; // empêche le scroll
+  document.body.style.overflow = "hidden";
 });
 
 // Fermer la modale
 function closeModal() {
   filtersModal.style.display = "none";
   overlay.style.display = "none";
-  document.body.style.overflow = ""; // réactive le scroll
+  document.body.style.overflow = "";
 }
 
 closeFilters.addEventListener("click", closeModal);
@@ -48,7 +48,7 @@ resetFilters.addEventListener("click", () => {
   document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
   searchInput.value = "";
   offers.forEach(offer => offer.style.display = "block");
-  updateCounters(); // remet les compteurs au total global
+  updateCounters();
 });
 
 // Fonction de tri / filtrage
@@ -73,7 +73,7 @@ function filterOffers() {
     }
   });
 
-  updateCounters(); // ici compteurs fixes donc pas d’effet sur affichage
+  updateCounters();
 }
 
 // Scroll top
@@ -137,29 +137,72 @@ window.addEventListener('DOMContentLoaded', () => {
     typeFilterGroup.appendChild(label);
   });
 
-  // Première mise à jour des compteurs (fixes)
   updateCounters();
 });
 
-// Mise à jour des compteurs (affichent le total global, pas dynamique)
+// Mise à jour des compteurs dynamique selon la logique décrite
 function updateCounters() {
   const allOffers = Array.from(offers);
 
-  // Compteurs lieux (total global)
-  const lieuLabels = document.querySelectorAll('label[data-location]');
-  lieuLabels.forEach(label => {
-    const lieu = label.getAttribute('data-location');
-    const count = allOffers.filter(o => o.dataset.location === lieu).length;
-    const span = label.querySelector('.lieu-count');
-    if (span) span.textContent = count;
-  });
+  const selectedLocations = Array.from(document.querySelectorAll(".filter-location:checked")).map(i => i.value);
+  const selectedTypes = Array.from(document.querySelectorAll(".filter-type:checked")).map(i => i.value);
 
-  // Compteurs types (total global)
+  const locationLabels = document.querySelectorAll('label[data-location]');
   const typeLabels = document.querySelectorAll('label[data-type]');
-  typeLabels.forEach(label => {
-    const type = label.getAttribute('data-type');
-    const count = allOffers.filter(o => o.dataset.type === type).length;
-    const span = label.querySelector('.type-count');
-    if (span) span.textContent = count;
-  });
+
+  // Cas 1 : aucun filtre → tous les compteurs
+  if (selectedLocations.length === 0 && selectedTypes.length === 0) {
+    locationLabels.forEach(label => {
+      const lieu = label.getAttribute('data-location');
+      const count = allOffers.filter(o => o.dataset.location === lieu).length;
+      label.querySelector('.lieu-count').textContent = count;
+    });
+
+    typeLabels.forEach(label => {
+      const type = label.getAttribute('data-type');
+      const count = allOffers.filter(o => o.dataset.type === type).length;
+      label.querySelector('.type-count').textContent = count;
+    });
+    return;
+  }
+
+  // Cas 2 : lieu sélectionné uniquement → update types
+  if (selectedLocations.length > 0 && selectedTypes.length === 0) {
+    typeLabels.forEach(label => {
+      const type = label.getAttribute('data-type');
+      const count = allOffers.filter(o =>
+        selectedLocations.includes(o.dataset.location) &&
+        o.dataset.type === type
+      ).length;
+      label.querySelector('.type-count').textContent = count;
+    });
+
+    locationLabels.forEach(label => {
+      const lieu = label.getAttribute('data-location');
+      const count = allOffers.filter(o => o.dataset.location === lieu).length;
+      label.querySelector('.lieu-count').textContent = count;
+    });
+    return;
+  }
+
+  // Cas 3 : type sélectionné uniquement → update lieux
+  if (selectedTypes.length > 0 && selectedLocations.length === 0) {
+    locationLabels.forEach(label => {
+      const lieu = label.getAttribute('data-location');
+      const count = allOffers.filter(o =>
+        selectedTypes.includes(o.dataset.type) &&
+        o.dataset.location === lieu
+      ).length;
+      label.querySelector('.lieu-count').textContent = count;
+    });
+
+    typeLabels.forEach(label => {
+      const type = label.getAttribute('data-type');
+      const count = allOffers.filter(o => o.dataset.type === type).length;
+      label.querySelector('.type-count').textContent = count;
+    });
+    return;
+  }
+
+  // Cas 4 : les deux filtres sont actifs → ne rien modifier
 }
