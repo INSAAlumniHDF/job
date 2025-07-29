@@ -140,7 +140,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateCounters();
 });
 
-// Mise à jour des compteurs dynamique selon la logique décrite
+// ✅ Mise à jour des compteurs en logique croisée
 function updateCounters() {
   const allOffers = Array.from(offers);
 
@@ -150,59 +150,23 @@ function updateCounters() {
   const locationLabels = document.querySelectorAll('label[data-location]');
   const typeLabels = document.querySelectorAll('label[data-type]');
 
-  // Cas 1 : aucun filtre → tous les compteurs
-  if (selectedLocations.length === 0 && selectedTypes.length === 0) {
-    locationLabels.forEach(label => {
-      const lieu = label.getAttribute('data-location');
-      const count = allOffers.filter(o => o.dataset.location === lieu).length;
-      label.querySelector('.lieu-count').textContent = count;
-    });
+  // Types → dépend uniquement des lieux sélectionnés (ou tout si aucun lieu)
+  typeLabels.forEach(label => {
+    const type = label.getAttribute('data-type');
+    const count = allOffers.filter(o =>
+      (selectedLocations.length === 0 || selectedLocations.includes(o.dataset.location)) &&
+      o.dataset.type === type
+    ).length;
+    label.querySelector('.type-count').textContent = count;
+  });
 
-    typeLabels.forEach(label => {
-      const type = label.getAttribute('data-type');
-      const count = allOffers.filter(o => o.dataset.type === type).length;
-      label.querySelector('.type-count').textContent = count;
-    });
-    return;
-  }
-
-  // Cas 2 : lieu sélectionné uniquement → update types
-  if (selectedLocations.length > 0 && selectedTypes.length === 0) {
-    typeLabels.forEach(label => {
-      const type = label.getAttribute('data-type');
-      const count = allOffers.filter(o =>
-        selectedLocations.includes(o.dataset.location) &&
-        o.dataset.type === type
-      ).length;
-      label.querySelector('.type-count').textContent = count;
-    });
-
-    locationLabels.forEach(label => {
-      const lieu = label.getAttribute('data-location');
-      const count = allOffers.filter(o => o.dataset.location === lieu).length;
-      label.querySelector('.lieu-count').textContent = count;
-    });
-    return;
-  }
-
-  // Cas 3 : type sélectionné uniquement → update lieux
-  if (selectedTypes.length > 0 && selectedLocations.length === 0) {
-    locationLabels.forEach(label => {
-      const lieu = label.getAttribute('data-location');
-      const count = allOffers.filter(o =>
-        selectedTypes.includes(o.dataset.type) &&
-        o.dataset.location === lieu
-      ).length;
-      label.querySelector('.lieu-count').textContent = count;
-    });
-
-    typeLabels.forEach(label => {
-      const type = label.getAttribute('data-type');
-      const count = allOffers.filter(o => o.dataset.type === type).length;
-      label.querySelector('.type-count').textContent = count;
-    });
-    return;
-  }
-
-  // Cas 4 : les deux filtres sont actifs → ne rien modifier
+  // Lieux → dépend uniquement des types sélectionnés (ou tout si aucun type)
+  locationLabels.forEach(label => {
+    const lieu = label.getAttribute('data-location');
+    const count = allOffers.filter(o =>
+      (selectedTypes.length === 0 || selectedTypes.includes(o.dataset.type)) &&
+      o.dataset.location === lieu
+    ).length;
+    label.querySelector('.lieu-count').textContent = count;
+  });
 }
