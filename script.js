@@ -42,6 +42,7 @@ resetFilters.addEventListener("click", () => {
   document.querySelectorAll("#filtersModal input[type=checkbox]").forEach(cb => cb.checked = false);
   searchInput.value = "";
   offers.forEach(offer => offer.style.display = "block");
+  updateCounters(); // remet les bons compteurs
 });
 
 // Fonction de tri
@@ -65,6 +66,8 @@ function filterOffers() {
       offer.style.display = "none";
     }
   });
+
+  updateCounters();
 }
 
 // Scroll top
@@ -80,12 +83,12 @@ backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+// Génération dynamique des filtres + compteurs
 window.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.offer-card');
 
-  // --- COMPTEUR LIEUX ---
-  const lieuxMap = new Map(); // { "Lyon" => 2, "Paris" => 1 }
-
+  // --- Génération Lieux ---
+  const lieuxMap = new Map();
   cards.forEach(card => {
     const lieu = card.dataset.location;
     if (lieu) {
@@ -98,16 +101,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   [...lieuxMap.entries()].sort().forEach(([lieu, count]) => {
     const label = document.createElement("label");
+    label.setAttribute('data-location', lieu);
     label.innerHTML = `
       <input type="checkbox" value="${lieu}" class="filter-location" />
-      ${lieu} (${count})
+      ${lieu} (<span class="lieu-count">${count}</span>)
     `;
     lieuFilterGroup.appendChild(label);
   });
 
-  // --- COMPTEUR TYPES ---
+  // --- Génération Types ---
   const typesMap = new Map();
-
   cards.forEach(card => {
     const type = card.dataset.type;
     if (type) {
@@ -120,11 +123,37 @@ window.addEventListener('DOMContentLoaded', () => {
 
   [...typesMap.entries()].sort().forEach(([type, count]) => {
     const label = document.createElement("label");
+    label.setAttribute('data-type', type);
     label.innerHTML = `
       <input type="checkbox" value="${type}" class="filter-type" />
-      ${type} (${count})
+      ${type} (<span class="type-count">${count}</span>)
     `;
     typeFilterGroup.appendChild(label);
   });
+
+  // Première mise à jour des compteurs
+  updateCounters();
 });
 
+// Mise à jour des compteurs dynamiques après chaque filtre
+function updateCounters() {
+  const visibleOffers = Array.from(offers).filter(offer => offer.style.display !== "none");
+
+  // Compteurs lieux
+  const lieuLabels = document.querySelectorAll('label[data-location]');
+  lieuLabels.forEach(label => {
+    const lieu = label.getAttribute('data-location');
+    const count = visibleOffers.filter(o => o.dataset.location === lieu).length;
+    const span = label.querySelector('.lieu-count');
+    if (span) span.textContent = count;
+  });
+
+  // Compteurs types
+  const typeLabels = document.querySelectorAll('label[data-type]');
+  typeLabels.forEach(label => {
+    const type = label.getAttribute('data-type');
+    const count = visibleOffers.filter(o => o.dataset.type === type).length;
+    const span = label.querySelector('.type-count');
+    if (span) span.textContent = count;
+  });
+}
