@@ -30,10 +30,16 @@ searchInput.addEventListener("input", () => {
   filterOffers();
 });
 
-// Appliquer les filtres via formulaire
+// Appliquer les filtres en direct quand une case est cochée/décochée
+document.addEventListener("change", (e) => {
+  if (e.target.classList.contains("filter-location") || e.target.classList.contains("filter-type")) {
+    filterOffers();
+  }
+});
+
+// Bouton "Appliquer les filtres" = juste fermer la modale
 filtersForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  filterOffers();
   closeModal();
 });
 
